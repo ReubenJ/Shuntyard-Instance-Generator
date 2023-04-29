@@ -5,6 +5,7 @@ from itertools import permutations
 from utils import kendall_tau
 import os
 import configparser
+from pathlib import Path
 
 
 def main(args):
@@ -29,7 +30,7 @@ def main(args):
         print("Reading arguments failed due to" + e)
     
     # Set path
-    path = "/home/jesse/Documents/GitProjects/InstanceGenerator/quasi_real_instances/" + "exp" + experiment_number + "/"
+    path = Path("./quasi_real_instances/") / "exp" / experiment_number
     path_addon = graph_type + "_"
     path_addon += instance_type + "_"
     if goal_swaps + start_swaps < 0:
@@ -39,11 +40,11 @@ def main(args):
     path_addon += str(branches) + "b_"
     path_addon += str(gate_length) + "g_"
     path_addon += str(randomness_parameter) + "r"
-    path+=path_addon + "/"
+    path /= path_addon
     
     # Generate storage dir
     try:
-        os.mkdir(path)
+        path.mkdir(parents=True, exist_ok=True)
     except FileExistsError:
         print()
     
@@ -180,28 +181,28 @@ cp.read("settings.ini")
 # Experiment 1: Performance test
 
 # # Experiment 1a: Performance on Shuffleboard, no matching
-# main(list(cp['ARRIVAL SHUFFLEBOARD'].values())) # few instances, easy to solve
-# main(list(cp['DEPARTURE SHUFFLEBOARD'].values())) # few instances, easy to solve
-# main(list(cp['ARRIVAL HARD SHUFFLEBOARD'].values())) # (50 % random start swaps)
-# main(list(cp['DEPARTURE HARD SHUFFLEBOARD'].values())) # (50 % random goal swaps)
+main(list(cp['ARRIVAL SHUFFLEBOARD'].values())) # few instances, easy to solve
+main(list(cp['DEPARTURE SHUFFLEBOARD'].values())) # few instances, easy to solve
+main(list(cp['ARRIVAL HARD SHUFFLEBOARD'].values())) # (50 % random start swaps)
+main(list(cp['DEPARTURE HARD SHUFFLEBOARD'].values())) # (50 % random goal swaps)
 
-# # Experiment 1b: Performance on Carrousel, no matching
-# main(list(cp['ARRIVAL HARD CARROUSEL'].values())) # (50 % random start swaps)
-# main(list(cp['DEPARTURE HARD CARROUSEL'].values())) # (50 % random goal swaps)
+# Experiment 1b: Performance on Carrousel, no matching
+main(list(cp['ARRIVAL HARD CARROUSEL'].values())) # (50 % random start swaps)
+main(list(cp['DEPARTURE HARD CARROUSEL'].values())) # (50 % random goal swaps)
 
-# # Experiment 1c: Performance on shuffleboard / carrousel with 1 , 3 , 5 teams
-# main(list(cp['ARRIVAL HARD SHUFFLEBOARD 1 TEAM'].values())) # (50 % random start swaps)
-# main(list(cp['ARRIVAL HARD SHUFFLEBOARD 3 TEAMS'].values())) # (50 % random start swaps)
-# main(list(cp['ARRIVAL HARD SHUFFLEBOARD 5 TEAMS'].values())) # (50 % random start swaps)
+# Experiment 1c: Performance on shuffleboard / carrousel with 1 , 3 , 5 teams
+main(list(cp['ARRIVAL HARD SHUFFLEBOARD 1 TEAM'].values())) # (50 % random start swaps)
+main(list(cp['ARRIVAL HARD SHUFFLEBOARD 3 TEAMS'].values())) # (50 % random start swaps)
+main(list(cp['ARRIVAL HARD SHUFFLEBOARD 5 TEAMS'].values())) # (50 % random start swaps)
 
-# main(list(cp['ARRIVAL HARD CARROUSEL 1 TEAM'].values())) # (50 % random start swaps)
-# main(list(cp['ARRIVAL HARD CARROUSEL 3 TEAMS'].values())) # (50 % random start swaps)
-# main(list(cp['ARRIVAL HARD CARROUSEL 5 TEAMS'].values())) # (50 % random start swaps)
+main(list(cp['ARRIVAL HARD CARROUSEL 1 TEAM'].values())) # (50 % random start swaps)
+main(list(cp['ARRIVAL HARD CARROUSEL 3 TEAMS'].values())) # (50 % random start swaps)
+main(list(cp['ARRIVAL HARD CARROUSEL 5 TEAMS'].values())) # (50 % random start swaps)
 
 
 
 # # Experiment 2: reversals
-# main(list(cp['REVERSAL'].values()))
+main(list(cp['REVERSAL'].values()))
 
 # # Experiment 3: GRID vs SHUFFLEBOARD vs CARROUSEL
 main(list(cp['RANDOM SHUFFLEBOARD 25'].values()))

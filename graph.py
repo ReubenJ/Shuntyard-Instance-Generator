@@ -3,6 +3,7 @@ from platform import node
 from re import T
 import string
 from node import Node
+from pathlib import Path
 
 class Graph:
     def __init__(self, name : string , nodes : list[Node]):
@@ -53,7 +54,7 @@ class Graph:
         return num_of_branches + 1 # there's a 0th branch
 
     def write_to_file(self, dir : string):
-        file_name = self.name + ".graph"
+        file_name = Path(self.name + ".graph")
         first_lines = "type graph" + "\n"
         first_lines += "nodes " + str(self.nodes.__len__()) + "\n"
         first_lines += "map"
@@ -63,6 +64,6 @@ class Graph:
             body += node.to_string()
             for neighbor in node.neighbors:
                 body += " " + neighbor.to_string()
-        f = open(dir + file_name,'w')
+        f = open(dir / file_name,'w')
         f.write(first_lines + body)
         f.close()

@@ -3,6 +3,7 @@ import string
 from random import sample
 from numpy import random
 import numpy as np
+from pathlib import Path
 
 from agent import Agent
 from graph import Graph
@@ -84,7 +85,7 @@ class Scenario:
             agent.match(num_of_types)
 
     def write_to_file(self, filename : string, dir : string):
-        file_name = filename + ".scen"
+        file_name = Path(filename + ".scen")
         first_lines = "version 1 graph" + "\n"
         first_lines += self.graph.name + ".graph" + "\n"
         first_lines += "Num_of_Agents " + str(self.agents.__len__()) + "\n"
@@ -101,7 +102,7 @@ class Scenario:
         body += "goals"
         for agent in self.agents:
             body += "\n" + agent.type + " " + agent.goal.to_string()
-        f = open(dir + "/" + file_name, 'w')
+        f = open(dir / file_name, 'w')
         f.write(first_lines + body)
         f.close()
 
