@@ -1,0 +1,9 @@
+name: shuntyard-instance-generator
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - black
+  - ruff
+  - numpy
