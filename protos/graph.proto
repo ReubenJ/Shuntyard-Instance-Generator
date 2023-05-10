@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package shuntyardgenerator;
+
+message Graph {
+    repeated Node nodes = 2;
+}
+
+message Node {
+    string id = 1;
+    NodeType type = 2;
+    repeated string neighbors = 3;
+}
+
+enum NodeType {
+    GATE = 0;
+    BRANCH = 1;
+    BRANCH_HEAD = 2;
+}

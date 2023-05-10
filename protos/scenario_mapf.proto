@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package shuntyardgenerator;
+
+import "graph.proto";
+import "agent.proto";
+
+message Scenario {
+    Graph graph = 1;
+    repeated Agent agents = 2;
+}

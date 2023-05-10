@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package shuntyardgenerator;
+
+message Agent {
+    string name = 1;
+    string type = 2;
+    string start = 3;
+    string goal = 4;
+}
