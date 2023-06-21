@@ -5,6 +5,5 @@ package shuntyardgenerator;
 message Agent {
     string name = 1;
     string type = 2;
-    string start = 3;
-    string goal = 4;
+    string start_or_end_track = 3;
 }

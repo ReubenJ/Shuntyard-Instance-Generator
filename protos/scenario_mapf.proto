@@ -2,10 +2,10 @@ syntax = "proto3";
 
 package shuntyardgenerator;
 
-import "graph.proto";
 import "agent.proto";
 
 message Scenario {
-    Graph graph = 1;
-    repeated Agent agents = 2;
+    string graph = 1;
+    repeated Agent incoming_agents = 2;
+    repeated Agent outgoing_agents = 3;
 }
