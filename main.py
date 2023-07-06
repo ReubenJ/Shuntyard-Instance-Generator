@@ -6,6 +6,26 @@ from utils import kendall_tau
 import os
 import configparser
 from pathlib import Path
+import random
+
+
+def reverse(agents: list[int], number_of_reversals: int):
+    """
+    Reverse the order of the last number_of_reversals agents in the list
+    
+    Args:
+        agents (list[int]): list of agents
+        number_of_reversals (int): number of agents that should be reversed
+    
+    Returns:
+        list[int]: list of agents with the last number_of_reversals reversed
+    """
+    if number_of_reversals == 0:  # otherwise we get a reversed copy of the list
+        return agents
+    return agents[:-number_of_reversals] + agents[-number_of_reversals:][::-1]
+    
+    
+    
 
 
 def main(args):
@@ -102,10 +122,16 @@ def main(args):
         Scen_gen = ScenarioGenerator(G)
         assert(min_agents == max_agents) # this experiment assumes a fixed number of agents.
         instance_counter = 0
-        # loop over all permutations to generate all possible reversal scenarios
-        for permutation in permutations(range(max_agents), max_agents):
+        if max_agents < 5:
+            step = 1
+        else:
+            step = max_agents // 5
+        for difficulty in range(0, max_agents, step):
+            permutation = reverse(list(range(min_agents)), difficulty + 1)
             if instance_type == "reversal":
                 S = Scen_gen.generate_sequence("S", permutation)
+            if num_of_types != 0:
+                S.match(num_of_types)
             S.write_to_file(path_addon + "_" + str(max_agents) + "a_" + str(goal_swaps) + "gs_" + str(start_swaps) + "ss_" + str(kendall_tau(permutation)) + "tau_" + str(instance_counter), path)
             instance_counter += 1
         return 0
@@ -181,40 +207,46 @@ cp.read("settings.ini")
 # Experiment 1: Performance test
 
 # # Experiment 1a: Performance on Shuffleboard, no matching
-main(list(cp['ARRIVAL SHUFFLEBOARD'].values())) # few instances, easy to solve
-main(list(cp['DEPARTURE SHUFFLEBOARD'].values())) # few instances, easy to solve
-main(list(cp['ARRIVAL HARD SHUFFLEBOARD'].values())) # (50 % random start swaps)
-main(list(cp['DEPARTURE HARD SHUFFLEBOARD'].values())) # (50 % random goal swaps)
+# main(list(cp['ARRIVAL SHUFFLEBOARD'].values())) # few instances, easy to solve
+# main(list(cp['DEPARTURE SHUFFLEBOARD'].values())) # few instances, easy to solve
+# main(list(cp['ARRIVAL HARD SHUFFLEBOARD'].values())) # (50 % random start swaps)
+# main(list(cp['DEPARTURE HARD SHUFFLEBOARD'].values())) # (50 % random goal swaps)
 
-# Experiment 1b: Performance on Carrousel, no matching
-main(list(cp['ARRIVAL HARD CARROUSEL'].values())) # (50 % random start swaps)
-main(list(cp['DEPARTURE HARD CARROUSEL'].values())) # (50 % random goal swaps)
+# # Experiment 1b: Performance on Carrousel, no matching
+# main(list(cp['ARRIVAL HARD CARROUSEL'].values())) # (50 % random start swaps)
+# main(list(cp['DEPARTURE HARD CARROUSEL'].values())) # (50 % random goal swaps)
 
-# Experiment 1c: Performance on shuffleboard / carrousel with 1 , 3 , 5 teams
-main(list(cp['ARRIVAL HARD SHUFFLEBOARD 1 TEAM'].values())) # (50 % random start swaps)
-main(list(cp['ARRIVAL HARD SHUFFLEBOARD 3 TEAMS'].values())) # (50 % random start swaps)
-main(list(cp['ARRIVAL HARD SHUFFLEBOARD 5 TEAMS'].values())) # (50 % random start swaps)
+# # Experiment 1c: Performance on shuffleboard / carrousel with 1 , 3 , 5 teams
+# main(list(cp['ARRIVAL HARD SHUFFLEBOARD 1 TEAM'].values())) # (50 % random start swaps)
+# main(list(cp['ARRIVAL HARD SHUFFLEBOARD 3 TEAMS'].values())) # (50 % random start swaps)
+# main(list(cp['ARRIVAL HARD SHUFFLEBOARD 5 TEAMS'].values())) # (50 % random start swaps)
 
-main(list(cp['ARRIVAL HARD CARROUSEL 1 TEAM'].values())) # (50 % random start swaps)
-main(list(cp['ARRIVAL HARD CARROUSEL 3 TEAMS'].values())) # (50 % random start swaps)
-main(list(cp['ARRIVAL HARD CARROUSEL 5 TEAMS'].values())) # (50 % random start swaps)
+# main(list(cp['ARRIVAL HARD CARROUSEL 1 TEAM'].values())) # (50 % random start swaps)
+# main(list(cp['ARRIVAL HARD CARROUSEL 3 TEAMS'].values())) # (50 % random start swaps)
+# main(list(cp['ARRIVAL HARD CARROUSEL 5 TEAMS'].values())) # (50 % random start swaps)
 
 
 
 # # Experiment 2: reversals
-main(list(cp['REVERSAL'].values()))
+main(list(cp['REVERSAL 2 TRAINS'].values()))
+main(list(cp['REVERSAL 3 TRAINS'].values()))
+main(list(cp['REVERSAL 4 TRAINS'].values()))
+main(list(cp['REVERSAL 5 TRAINS'].values()))
+main(list(cp['REVERSAL 10 TRAINS'].values()))
+main(list(cp['REVERSAL 15 TRAINS'].values()))
+main(list(cp['REVERSAL 20 TRAINS'].values()))
 
-# # Experiment 3: GRID vs SHUFFLEBOARD vs CARROUSEL
-main(list(cp['RANDOM SHUFFLEBOARD 25'].values()))
-main(list(cp['RANDOM GRID 25'].values()))
-main(list(cp['RANDOM CARROUSEL 25'].values()))
+# # # Experiment 3: GRID vs SHUFFLEBOARD vs CARROUSEL
+# main(list(cp['RANDOM SHUFFLEBOARD 25'].values()))
+# main(list(cp['RANDOM GRID 25'].values()))
+# main(list(cp['RANDOM CARROUSEL 25'].values()))
 
-main(list(cp['RANDOM SHUFFLEBOARD 36'].values()))
-main(list(cp['RANDOM GRID 36'].values()))
-main(list(cp['RANDOM CARROUSEL 36'].values()))
+# main(list(cp['RANDOM SHUFFLEBOARD 36'].values()))
+# main(list(cp['RANDOM GRID 36'].values()))
+# main(list(cp['RANDOM CARROUSEL 36'].values()))
 
-main(list(cp['RANDOM SHUFFLEBOARD 49'].values()))
-main(list(cp['RANDOM GRID 49'].values()))
-main(list(cp['RANDOM CARROUSEL 49'].values()))
+# main(list(cp['RANDOM SHUFFLEBOARD 49'].values()))
+# main(list(cp['RANDOM GRID 49'].values()))
+# main(list(cp['RANDOM CARROUSEL 49'].values()))
 
 
